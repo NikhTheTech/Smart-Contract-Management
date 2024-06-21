@@ -8,9 +8,10 @@ This is an intuitive web3 application created using HTML, CSS, and Solidity. It 
 
 ### Application Preview 
 
-[![Web3 Local Bank](https://i.postimg.cc/qqp66sJg/FULL.png)](https://postimg.cc/5Yk2ZFFM)
+![image](https://github.com/NikhTheTech/Smart-Contract-Management/assets/95464996/27d0340b-f374-424c-bdd2-fe1be9b5a804)
 
-[![Transfer Preview](https://i.postimg.cc/gj4XVxjs/USE.png)](https://postimg.cc/gLX2dkvL)
+![image](https://github.com/NikhTheTech/Smart-Contract-Management/assets/95464996/3397f887-aec7-4fdb-9c41-ad80436d4201)
+
 
 ---
 
