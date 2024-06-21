@@ -5,6 +5,7 @@ This repository contains a simple Ethereum smart contract and a frontend interfa
 ## Table of Contents
 
 - [Overview](#overview)
+- [Application Preview](#application-preview)
 - [Smart Contract](#smart-contract)
   - [Bank.sol](#banksol)
   - [Description](#description)
@@ -19,7 +20,6 @@ This repository contains a simple Ethereum smart contract and a frontend interfa
   - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Overview
 
