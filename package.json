@@ -8,7 +8,7 @@
     "dev": "lite-server"
   },
   "keywords": [],
-  "author": "Rizul Bhardwah",
+  "author": "Nikhil Chib",
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
