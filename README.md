@@ -1,10 +1,29 @@
-# 🌐 Web3 Local Bank
+# Smart Contract Management
 
-> 💸 A Simple Web3 application for transferring Ether and personalizing your account. 
+This repository contains a simple Ethereum smart contract and a frontend interface for managing bank-like functionalities on the blockchain.
 
-## Description 
+## Table of Contents
 
-This is an intuitive web3 application created using HTML, CSS, and Solidity. It leverages the power of Ethereum networks to provide a decentralized banking experience. With this dApp, users can easily deploy a contract and transfer Ether and personalize their account names. The application is built using Solidity smart contracts, the powerful Ethers.js library, and uses the user-friendly MetaMask wallet extension.
+- [Overview](#overview)
+- [Smart Contract](#smart-contract)
+  - [Bank.sol](#banksol)
+  - [Description](#description)
+  - [Functions](#functions)
+- [Frontend](#frontend)
+  - [index.html](#indexhtml)
+  - [Description](#description-1)
+  - [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Overview
+
+This project showcases a basic implementation of a decentralized bank using Ethereum smart contracts. Users can interact with the smart contract to set account names, check balances, and transfer funds. The frontend provides a user-friendly interface for these operations.
 
 ### Application Preview 
 
@@ -13,90 +32,126 @@ This is an intuitive web3 application created using HTML, CSS, and Solidity. It 
 ![image](https://github.com/NikhTheTech/Smart-Contract-Management/assets/95464996/3397f887-aec7-4fdb-9c41-ad80436d4201)
 
 
----
+## Smart Contract
 
+### Bank.sol
 
-## Technologies Used 🛠️
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)  ![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?style=for-the-badge&logo=Ethereum&logoColor=white)  ![Web3.js](https://img.shields.io/badge/web3.js-F16822?style=for-the-badge&logo=web3.js&logoColor=white)  ![Solidity](https://img.shields.io/badge/Solidity-%23363636.svg?style=for-the-badge&logo=solidity&logoColor=white)  ![Metamask](https://avatars.githubusercontent.com/u/11744586?s=48&v=4)  ![Hardhat](https://hardhat.org/_next/static/media/hardhat-logo.5c5f687b.svg)
+contract Bank {
+    mapping(address => string) accountNames;
 
-This project utilizes the following technologies:
+    event Transfer(uint256 amount);
+    event NameUpdate(string value);
 
-- **Solidity**: Solidity is a programming language specifically designed for writing smart contracts on the Ethereum platform. It is used to write the Bank smart contract in this project. [Learn more about Solidity](https://docs.soliditylang.org/).
+    function setAccountName(string memory _name) public {
+        require(
+            keccak256(abi.encodePacked(accountNames[msg.sender])) !=
+                keccak256(abi.encodePacked(_name)),
+            "New name is same as old name"
+        );
+        accountNames[msg.sender] = _name;
 
-- **Ethers.js**: Ethers.js is a JavaScript library that provides a concise and consistent API for interacting with Ethereum and Ethereum-like networks. It is used to interact with the Ethereum blockchain and execute transactions in this project. [Explore Ethers.js](https://docs.ethers.org/v5/).
+        emit NameUpdate(accountNames[msg.sender]);
+    }
 
-- **MetaMask**: MetaMask is a popular browser extension wallet that allows users to manage Ethereum accounts and interact with decentralized applications. It is used to connect to the Ethereum network and perform transactions in this project. [Get MetaMask](https://metamask.io/).
+    function getAccountName() public view returns (string memory) {
+        return accountNames[msg.sender];
+    }
 
-- **Hardhat**: Hardhat is a development environment and testing framework for Ethereum smart contracts. It provides tools for compiling, deploying, and testing contracts. Hardhat is used to compile and deploy the Bank smart contract in this project. [Discover Hardhat](https://hardhat.org/).
+    error InsufficientBalance(uint256 balance, uint256 withdrawAmount);
 
-Feel free to explore the provided links to learn more about each technology. 🚀
+    function transferFunds(address payable _to) public payable {
+        _to.transfer(msg.value);
+        if (msg.sender.balance < msg.value)
+            revert
+                InsufficientBalance({
+                    balance: msg.sender.balance,
+                    withdrawAmount: msg.value
+                });
+        emit Transfer(msg.value);
+    }
 
-## Installation ⬇️
+    function getBalance() public view returns (uint256) {
+        return msg.sender.balance;
+    }
+}
+```
 
-### Follow these steps to get the project up and running 🏗️
+### Description
 
-1. Download or clone the project.
-2. Install the dependencies by running `npm install`.
-3. Start the local blockchain using Hardhat by running `npx hardhat node`.
-4. Open new terminal and deploy the Bank contract `npx hardhat run --network localhost scripts/deploy.js`.
-5. Start the development server by running `npm run dev`.
+The `Bank` smart contract allows users to set their account names, transfer funds to other addresses, and check their account balances on the Ethereum blockchain.
 
-### Configure MetaMask to use the Hardhat node 🦊
+### Functions
 
-1. Open the MetaMask extension in your browser.
-2. Click on the account icon in the top right corner and select "Settings".
-3. In the "Networks" tab, click on "Add Network".
-4. Fill in the following details:
-   - Network Name: hardhat-test-network
-   - RPC URL: http://127.0.0.1:8545/
-   - Chain ID: 31337
-   - Currency Symbol: GO or ETH
-5. Click on "Save" to add the Hardhat network to MetaMask.
+- `setAccountName`: Allows users to set their account names.
+- `getAccountName`: Retrieves the account name of the caller.
+- `transferFunds`: Transfers Ether to another address.
+- `getBalance`: Retrieves the Ether balance of the caller.
 
-### Add accounts using private keys by Hardhat for testing 🔑
+## Frontend
 
-1. In the MetaMask extension, click on the account icon in the top right corner.
-2. Select "Import Account" or "Import Account using Private Key" (depending on your version of MetaMask).
-3. In the "Private Key" field, enter one of the private keys provided by Hardhat.
-   - To access the list of private keys, open the terminal where you started the Hardhat local network.
-   - The private keys are displayed as part of the accounts generated by Hardhat.
-4. Click on "Import" to import the account into MetaMask.
-5. Repeat the above steps to add more accounts for testing purposes.
+### index.html
 
-> If you need detailed instructions or visual guidance, you can refer to this step-by-step guide on [how to use MetaMask with a Hardhat node](https://support.chainstack.com/hc/en-us/articles/4408642503449-Using-MetaMask-with-a-Hardhat-node).
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metacrafters Local Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./public/css/styles.css">
+    <link rel="icon" href="./public/images/favicon.jpg" type="image/x-icon"/>
+</head>
+<body>
+    <!-- Your HTML content here -->
+</body>
+</html>
+```
 
+### Description
 
-## Usage 🪜
+`index.html` provides a frontend interface built with Bootstrap and JavaScript to interact with the `Bank` smart contract deployed on Ethereum.
 
-**To use the application, follow these instructions:**
+### Features
 
-1. After connecting MetaMask to the Hardhat local network, connect your wallet with the application
-2. Click on Transfer Funds and fill in the recipient's address and the amount you want to transfer.
-3. Click the "Transfer" button to initiate the transaction.
-4. Confirm the transaction in MetaMask.
-5. The transaction details will be logged to the console, and the account balance will be updated.
+- Connect wallet to interact with the blockchain.
+- Display account name, address, and balance.
+- Change account name and transfer funds functionalities.
 
-**You can also personalize your account name:**
+## Technologies Used
 
-1. Enter a new name in the input field.
-2. Click the "Update Name" button to set the new account name.
-3. Confirm the transaction in MetaMask.
-4. The account name will be updated, and the change will be reflected in the account details.
+- **Solidity**: Programming language for writing smart contracts.
+- **Web3.js**: Library for interacting with Ethereum blockchain.
+- **Bootstrap**: CSS framework for frontend design.
+- **Ethers.js**: JavaScript library for Ethereum interaction.
 
-## Contract Details 🔗
+## Getting Started
 
-The smart contract used in this project is named `Bank` present inside the `contracts/Bank.sol` file. It allows users to set an account name and transfer funds. The contract emits events for successful transfers and name updates.
+To run this project locally or deploy it:
 
-## Configuration ⚙️
+### Prerequisites
 
-The `hardhat.config.js` file is used for configuring the Hardhat development environment. It specifies the Solidity version and required libraries to deploy contracts on the hardhat node.
+- Install MetaMask or any Ethereum-compatible wallet extension in your browser.
+- Connect to an Ethereum network (Mainnet, Ropsten, Rinkeby, etc.) using MetaMask.
 
-## Scripts 📜
+### Installation
 
-The `deploy.js` script, located in the `scripts` folder, is used to deploy the Bank contract. It uses Hardhat's `ethers` library to interact with the blockchain. This script is executed with the `npx hardhat run` command.
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/NikhTheTech/Smart-Contract-Management
+   ```
+2. Deploy `Bank.sol` on an Ethereum-compatible blockchain (e.g., Remix IDE, Truffle).
+3. Update `index.html` with the deployed smart contract address.
 
----
+## Usage
 
-This project is open-source !😉
+1. Open `index.html` in a web browser with MetaMask connected to your preferred Ethereum network.
+2. Connect your wallet and interact with the provided functionalities.
 
+## Contributing
+
+Contributions are welcome! Please fork this repository, make your changes, and submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
