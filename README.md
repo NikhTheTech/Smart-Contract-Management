@@ -154,8 +154,8 @@ To run this project locally or deploy it:
   3. Start the local blockchain using Hardhat by running `npx hardhat node`.
   4. Open new terminal and deploy the Bank contract `npx hardhat run --network localhost scripts/deploy.js`
   5. Start the development server by running `npm run dev`.
-     
-**Configure MetaMask to use the Hardhat node **
+
+**Configure MetaMask to use the Hardhat node**
   1. Open the MetaMask extension in your browser.
   2. Click on the account icon in the top right corner and select "Settings".
   3. In the "Networks" tab, click on "Add Network".
